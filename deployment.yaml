@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask_app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask_app
+    spec:
+      containers:
+      - name: flask_app
+        image: aspdiscovery/flask_app:latest
+        ports:
+        - containerPort: 80

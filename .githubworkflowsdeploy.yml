@@ -1,0 +1,28 @@
+name: Deploy to Minikube
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Minikube
+      uses: kubeactions/setup-minikube@v1
+      with:
+        k8s_version: '1.21.0' # Adjust to your desired Kubernetes version
+
+    - name: Start Minikube
+      run: minikube start --driver=docker
+
+    - name: Apply Kubernetes manifests
+      run: kubectl apply -f k8s/
+
+    - name: Wait for Deployment rollout
+      run: kubectl rollout status deployment/flask_app -n default
